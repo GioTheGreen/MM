@@ -3,9 +3,12 @@
 #include <chrono>
 #include <random>
 #include <SFML/Network.hpp>
+#include <queue>
 
 void server()
 {
+    std::queue<sf::Packet> Queue;
+
     unsigned short port = 4300;
     sf::TcpListener listener;
     sf::Socket::Status status = sf::Socket::Disconnected;
@@ -20,30 +23,51 @@ void server()
             port++;
         }
     }
-    sf::TcpSocket socket;
-    status = listener.accept(socket);
-    if(status != sf::Socket::Done)
+
+    // Create queue
+    // Create list
+
+    // Create acceptor thread (needs to know queue and list)
+
+    // Loop
+    // get message from queue
+    // send message to everyone in list
+
+
+
+    for (int i = 0; i < 2; i++)
     {
-        std::cout << "Error accepinging\n";
-        return;
-    }
-    sf::Packet packet;
-    status = socket.receive(packet);
-    if(status != sf::Socket::Done)
-    {
-        std::cout << "Error reciving\n";
-        return;
-    }
-    std::string message;
-    packet >> message;
-    std::cout << message << std::endl;
-    packet.clear();
-    packet << "message received";
-    status = socket.send(packet);
-    if(status != sf::Socket::Done)
-    {
-        std::cout << "Error sending\n";
-        return;
+        // Make socket a pointer
+        sf::TcpSocket socket;
+        status = listener.accept(socket);
+        if(status != sf::Socket::Done)
+        {
+            std::cout << "Error accepinging\n";
+            return;
+        }
+        // TODO: create a thread with *socket; needs to know what queue of messages we are using
+        // Add *socket to a list of *sockets
+        // Thread
+        sf::Packet packet;
+        status = socket.receive(packet);
+        if(status != sf::Socket::Done)
+        {
+            std::cout << "Error reciving\n";
+            return;
+        }
+        std::string message;
+        Queue.push(packet);
+        Queue.front() >> message;
+        Queue.pop();
+        std::cout << message << std::endl;
+        packet.clear();
+        packet << "message received";
+        status = socket.send(packet);
+        if(status != sf::Socket::Done)
+        {
+            std::cout << "Error sending\n";
+            return;
+        }
     }
 }
 
@@ -89,8 +113,10 @@ void client()
 int main()
 {
     std::thread serverThread(&server);
+    std::thread clientThread(&client);
     client();
     serverThread.join();
+    clientThread.join();
     return 0;
 
 
