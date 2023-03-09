@@ -45,7 +45,19 @@
 			<Add directory="/usr/local/SFML-2.2/lib" />
 			<Add directory="./lib" />
 		</Linker>
+		<Unit filename="Makefile" />
+		<Unit filename="accepter.cpp" />
+		<Unit filename="accepter.h" />
+		<Unit filename="client.cpp" />
+		<Unit filename="client.h" />
+		<Unit filename="list.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="queue.h" />
+		<Unit filename="receiver.cpp" />
+		<Unit filename="receiver.h" />
+		<Unit filename="server.cpp" />
+		<Unit filename="server.h" />
+		<Unit filename="util.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />
